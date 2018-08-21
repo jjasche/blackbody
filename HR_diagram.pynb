@@ -1,0 +1,26 @@
+STEFAN-BOLTZMANN LAW
+
+The Stefan-Boltzmann law tells us how much energy a blackbody radiator of a known temperature radiates per unit area of its surface. It states that the radiated electromagnetic energy of a hot body is proportional to the surface area radiating that power, and the fourth power of the thermodynamic temperature. It can be used to calculate the total energy emitted per square centimetre in all directions.
+
+[http://sci.esa.int/education/35774-stellar-radiation-stellar-types/?fbodylongid=1698]
+
+
+The Hertzsprung-Russell diagram (HR diagram) is one of the most important tools in the study of stellar evolution. Developed independently in the early 1900s by Ejnar Hertzsprung and Henry Norris Russell, it plots the temperature of stars against their luminosity (the theoretical HR diagram), or the colour of stars (or spectral type) against their absolute magnitude (the observational HR diagram, also known as a colour-magnitude diagram).
+Depending on its initial mass, every star goes through specific evolutionary stages dictated by its internal structure and how it produces energy. Each of these stages corresponds to a change in the temperature and luminosity of the star, which can be seen to move to different regions on the HR diagram as it evolves. This reveals the true power of the HR diagram – astronomers can know a star’s internal structure and evolutionary stage simply by determining its position in the diagram.
+
+There are 3 main regions (or evolutionary stages) of the HR diagram:
+
+- The main sequence stretching from the upper left (hot, luminous stars) to the bottom right (cool, faint stars) dominates the HR diagram. It is here that stars spend about 90% of their lives burning hydrogen into helium in their cores. Main sequence stars have a luminosity class labelled V.
+
+- Red giant and supergiant stars (luminosity classes I through III) occupy the region above the main sequence. They have low surface temperatures and high luminosities which, according to the Stefan-Boltzmann law, means they also have large radii. Stars enter this evolutionary stage once they have exhausted the hydrogen fuel in their cores and have started to burn helium and other heavier elements.
+
+- White dwarf stars (luminosity class D) are the final evolutionary stage of low to intermediate mass stars, and are found in the bottom left of the HR diagram. These stars are very hot but have low luminosities due to their small size.
+
+The Sun is found on the main sequence with a luminosity of 1 and a temperature of around 5,400 Kelvin.
+Astronomers generally use the HR diagram to either summarise the evolution of stars, or to investigate the properties of a collection of stars. In particular, by plotting a HR diagram for either a globular or open cluster of stars, astronomers can estimate the age of the cluster from where stars appear to turnoff the main sequence (see the entry on main sequence for how this works).
+
+[from Swinburne University of Technology]
+[also see http://sci.esa.int/education/35774-stellar-radiation-stellar-types/?fbodylongid=1703]
+[and https://www.cosmos.esa.int/web/cesar/the-hertzsprung-russell-diagram]
+
+spectra from hipparcos
