@@ -27,6 +27,7 @@ d_saturn  = 9.539* AU #m
 d_uranus  = 19.18* AU #m
 d_neptune = 30.06* AU #m
 
+pnames_random =  np.array(['GC-818','Proxima Norma', 'Aporia', 'Nyota', 'Cantor', 'Algirae', 'Tarvos', 'Yuma', 'Gratian'])   
 pnames     = np.array(['Sun','Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune'])
 pcolor     = np.array(['yellow','gray', 'lemonchiffon', 'blue', 'darkred', 'orange', 'palegoldenrod', 'royalblue', 'cornflowerblue'])
 pdistances = np.array([0.,d_mercury, d_venus, d_earth, d_mars, d_jupiter, d_saturn, d_uranus, d_neptune])
@@ -58,7 +59,7 @@ def plot_hz(lower_limit=1,upper_limit=2):
     if(upper_limit>lower_limit):
         ax.axvspan(lower_limit, upper_limit, alpha=0.3, color='green')
     s0=400	
-    for i, txt in enumerate(pnames):
+    for i, txt in enumerate(pnames_random):
         ax.scatter(x[i], y[i], color=pcolor[i], s=s0*pradii[i]/pradii[2], marker='o')    
         ax.annotate(txt, (x[i], y[i]+0.1), fontsize=10)
 
@@ -163,6 +164,22 @@ def plot_data_spec(objectnr):
     plt.ylabel(r'SSI [W $m^{-2}\, nm^{-1}$]')
     plt.grid()
     plt.show()
+    
+    return x, y
+
+def get_object_luminosities():
+    
+    data=np.load('./data/sun_data.npz')
+    L1=data['L']
+    data=np.load('./data/whitedwarf_data.npz')
+    L2=data['L']
+    data=np.load('./data/redgiant_data.npz')
+    L3=data['L']
+    
+    return L1, L2, L3
+
+
+
 
 
 def get_spectra():
