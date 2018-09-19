@@ -8,7 +8,7 @@ AU = 1.496*1e11 #m
 
 
 #some constants
-sigmaSB = 5.670373e-8 #W⋅m^-2⋅K^-4
+sigmaSB = 5.670373e-8 #W m^-2 K^-4
 h = 6.626e-34
 c = 3.0e+8
 k = 1.38e-23
