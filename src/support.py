@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pylab as plt
+import matplotlib.cm as cm
 # support routines for jupyter notebook
 
 #astro distance
@@ -11,6 +12,8 @@ sigmaSB = 5.670373e-8 #W⋅m^-2⋅K^-4
 h = 6.626e-34
 c = 3.0e+8
 k = 1.38e-23
+b = 2.8977729*1e-3# m⋅K
+
 
 Rsun = 6.957*1e8 # m
 Tsun = 5778 #K
@@ -27,6 +30,7 @@ d_saturn  = 9.539* AU #m
 d_uranus  = 19.18* AU #m
 d_neptune = 30.06* AU #m
 
+pnames_random =  np.array(['GC-818','Proxima Norma', 'Aporia', 'Nyota', 'Cantor', 'Algirae', 'Tarvos', 'Yuma', 'Gratian'])   
 pnames     = np.array(['Sun','Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune'])
 pcolor     = np.array(['yellow','gray', 'lemonchiffon', 'blue', 'darkred', 'orange', 'palegoldenrod', 'royalblue', 'cornflowerblue'])
 pdistances = np.array([0.,d_mercury, d_venus, d_earth, d_mars, d_jupiter, d_saturn, d_uranus, d_neptune])
@@ -49,7 +53,7 @@ def plot_hz(lower_limit=1,upper_limit=2):
     y = np.ones(len(x))
 
     fig, ax = plt.subplots(figsize=(14, 7))
-    ax.set_title('The habitable zone in the solar system', fontsize=20)
+    ax.set_title('The habitable zone around a star', fontsize=20)
     ax.set_ylim([0.5,1.5])
     ax.set_xlim([0.25,40])
     ax.set_xscale('log')
@@ -58,7 +62,7 @@ def plot_hz(lower_limit=1,upper_limit=2):
     if(upper_limit>lower_limit):
         ax.axvspan(lower_limit, upper_limit, alpha=0.3, color='green')
     s0=400	
-    for i, txt in enumerate(pnames):
+    for i, txt in enumerate(pnames_random):
         ax.scatter(x[i], y[i], color=pcolor[i], s=s0*pradii[i]/pradii[2], marker='o')    
         ax.annotate(txt, (x[i], y[i]+0.1), fontsize=10)
 
@@ -163,13 +167,44 @@ def plot_data_spec(objectnr):
     plt.ylabel(r'SSI [W $m^{-2}\, nm^{-1}$]')
     plt.grid()
     plt.show()
+    
+    return x, y
+
+def get_object_luminosities():
+    
+    data=np.load('./data/sun_data.npz')
+    L1=data['L']
+    data=np.load('./data/whitedwarf_data.npz')
+    L2=data['L']
+    data=np.load('./data/redgiant_data.npz')
+    L3=data['L']
+    
+    return L1, L2, L3
+
+def get_object_luminosities_and_temperatures():
+    
+    data=np.load('./data/sun_data.npz')
+    L1=data['L']
+    T1=data['T']
+    data=np.load('./data/whitedwarf_data.npz')
+    L2=data['L']
+    T2=data['T']
+    data=np.load('./data/redgiant_data.npz')
+    L3=data['L']
+    T3=data['T']
+    
+    return T1,T2,T3,L1, L2, L3
+
+
+
+
 
 
 def get_spectra():
 
-    wavelengths = np.arange(1e-9, 2e-6, 1e-10) 
+    wavelengths = np.arange(1e-10, 2e-6, 0.1e-10) 
 
-    Temps=np.array([7000,6500,6000,5500,5000,4500,4000])
+    Temps=np.array([8000,7500,7000,6500,6000,5500,5000,4500,4000,3000])
     Temp=[]
     intensity=[]
     wavelength=[]
@@ -180,8 +215,9 @@ def get_spectra():
         Temp.append(T)
         wavelength.append(wavelengths*1e9)
         plt.plot(wavelengths*1e9, B,label='T='+'{:06.2f}'.format(T)+' [K]') 
+        plt.xticks(np.arange(np.min(wavelengths*1e9), np.max(wavelengths*1e9), step=100))
         plt.ylabel(r'$B(\lambda)$')
-        plt.xlabel(r'$\lambda$')
+        plt.xlabel(r'$\lambda [\mathrm{nm}]$')
 
     # show the plot
     plt.grid()
@@ -191,7 +227,68 @@ def get_spectra():
     return np.array(wavelength),np.array(intensity),np.array(Temp)
     
     
+#SOLUTIONS
+
+#1) Solution Wien's displacement
+def solution_wien_displacement(lambdas=None):
+    Tmax=np.array([8000,7500,7000,6500,6000,5500,5000,4500,4000,3000])
+    lmax = b/Tmax*1e9 #nm
     
+    plt.figure(figsize=(14, 7))    
+    plt.ylim([0,10000])
+    plt.xlim([350,800])
+    plt.scatter(np.array(lmax),np.array(Tmax))
+    plt.plot(np.array(lmax),np.array(Tmax))
+    plt.ylabel(r'$T \, [\mathrm{K}]$')
+    plt.xlabel(r'$\lambda \, [\mathrm{nm}]$')
+    
+    plt.title('Wien\'s displacement law')
+    Temps=None
+    Lums=None
+    if lambdas is not None:
+        Temps = b*1e9/lambdas #K
+        colors = cm.jet(np.linspace(0, 1, len(lambdas)))
+        for l in np.arange(len(lambdas)):
+            plt.scatter(lambdas[l],Temps[l],color=colors[l])
+            plt.plot([lambdas[l],lambdas[l]],[0,Temps[l]],'--',color=colors[l])
+            plt.plot([0,lambdas[l]],[Temps[l],Temps[l]],'--',color=colors[l])
+            plt.annotate("T = {0:.2f} [K]".format(Temps[l]), (lambdas[l]+5., Temps[l]+10.), fontsize=18,color=colors[l])
+    
+        #check Solution
+        T1, T2, T3, L1, L2, L3 = get_object_luminosities_and_temperatures()
+        
+        print (T2,Temps[1])
+        
+        dTemp=200 #K  read-of error
+
+        if np.fabs(Temps[0]-T1)<dTemp:
+            print ('Temperature of Stellar object Nr. 1 identified correctly')
+            print (r'Total Luminosity of Stellar object Nr. 1 $L_{\star}$=',L1/Lsun)
+        else:
+            print ('Temperature of Stellar object Nr. 1 does not match observations')
+            print ('Try again')
+            
+        if np.fabs(Temps[1]-T2)<dTemp:
+            print ('Temperature of Stellar object Nr. 2 identified correctly')
+            print (r'Total Luminosity of Stellar object Nr. 2 $L_{\star}$=',L2/Lsun)
+        else:
+            print ('Temperature of Stellar object Nr. 2 does not match observations')
+            print ('Try again')
+            
+        if np.fabs(Temps[2]-T3)<dTemp:
+            print ('Temperature of Stellar object Nr. 3 identified correctly')
+            print (r'Total Luminosity of Stellar object Nr. 3 $L_{\star}$=',L3/Lsun)
+        else:
+            print ('Temperature of Stellar object Nr. 3 does not match observations')
+            print ('Try again')
+            
+        Lums=np.array([L1,L2,L3])    
+    
+    plt.show()
+    
+    
+    
+    return Temps, Lums
     
     
 
