@@ -216,7 +216,7 @@ def get_spectra():
         wavelength.append(wavelengths*1e9)
         plt.plot(wavelengths*1e9, B,label='T='+'{:06.2f}'.format(T)+' [K]') 
         plt.xticks(np.arange(np.min(wavelengths*1e9), np.max(wavelengths*1e9), step=100))
-        plt.ylabel(r'$B(\lambda)$')
+        plt.ylabel(r'SSI [W $m^{-2}\, nm^{-1}$]')
         plt.xlabel(r'$\lambda [\mathrm{nm}]$')
 
     # show the plot
