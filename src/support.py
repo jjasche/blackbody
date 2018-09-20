@@ -66,7 +66,12 @@ def plot_hz(lower_limit=1,upper_limit=2):
         ax.scatter(x[i], y[i], color=pcolor[i], s=s0*pradii[i]/pradii[2], marker='o')    
         ax.annotate(txt, (x[i], y[i]+0.1), fontsize=10)
 
-def plot_HR(L=10**np.random.uniform(-5,6,200)*Lsun,T=np.random.uniform(0.25,10,200)*Tsun,Tmin=1000,Tmax=40000,Lmin=1e-5,Lmax=1e6):
+def plot_HR(Ls=10**np.random.uniform(-5,6,200)*Lsun,Ts=np.random.uniform(0.25,10,200)*Tsun,Tmin=1000,Tmax=40000,Lmin=1e-5,Lmax=1e6):
+    
+    T,Mag=np.loadtxt('./data/stars.txt', usecols=[0,1], unpack=True)
+    L=Lsun*10**(0.4*(4.74-Mag))
+    
+    
     y, x = np.mgrid[np.log10(Lmin):np.log10(Lmax):100j, np.log10(Tmin):np.log10(Tmax):100j]
     size = np.sqrt(10**(y)*(Tsun/(10**x))**4)
     temp = x
@@ -80,6 +85,11 @@ def plot_HR(L=10**np.random.uniform(-5,6,200)*Lsun,T=np.random.uniform(0.25,10,2
     lgL=np.log10(L/Lsun)
     lgT=np.log10(T)
     R=np.sqrt(10**(lgL)*(Tsun/(10**lgT))**4)
+    
+    
+    lgLs=np.log10(Ls/Lsun)
+    lgTs=np.log10(Ts)
+    Rs=np.sqrt(10**(lgLs)*(Tsun/(10**lgTs))**4)
     
     
     levels = [0.001,0.01,0.1,1,10,100,1000]
@@ -100,6 +110,15 @@ def plot_HR(L=10**np.random.uniform(-5,6,200)*Lsun,T=np.random.uniform(0.25,10,2
     ax.set_ylabel(r'luminosity $L_{\star}$ [$L_{_\odot}$]', fontsize=20)
     ax.set_title('Hertzsprung–Russell diagram', fontsize=20)
     ax.scatter(lgT,lgL,s=R*s0,c=T,cmap='magma_r')
+    ax.scatter(lgTs[0],lgLs[0],s=s0*4,color='green')
+    ax.scatter(lgTs[0],lgLs[0],s=s0*4,color='goldenrod',marker=(5, 2))
+    ax.annotate("Object Nr. 1", (lgTs[0]+.1, lgLs[0]+.3), fontsize=18,color='green')
+    ax.scatter(lgTs[1],lgLs[1],s=s0*4,color='red')
+    ax.scatter(lgTs[1],lgLs[1],s=s0*4,color='goldenrod',marker=(5, 2))
+    ax.annotate("Object Nr. 2", (lgTs[1]+.1, lgLs[1]+.3), fontsize=18,color='red')
+    ax.scatter(lgTs[2],lgLs[2],s=s0*4,color='blue')
+    ax.scatter(lgTs[2],lgLs[2],s=s0*4,color='goldenrod',marker=(5, 2))
+    ax.annotate("Object Nr. 3", (lgTs[2]+.1, lgLs[2]+.3), fontsize=18,color='blue')
     #ax.scatter(lgTsun,lgLsun,c=T,s=s0,cmap='magma_r')
     ax.invert_xaxis()
 
