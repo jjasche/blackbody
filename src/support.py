@@ -228,20 +228,26 @@ def get_spectra():
     Temp=[]
     intensity=[]
     wavelength=[]
-    plt.figure(figsize=(14, 7))
+    
+    fig =plt.figure(figsize=(14, 7)) 
+    ax = fig.add_subplot(111)
+  
     for T in Temps:
         B = planck(wavelengths, T)
         intensity.append(B)
         Temp.append(T)
         wavelength.append(wavelengths*1e9)
-        plt.plot(wavelengths*1e9, B,label='T='+'{:06.2f}'.format(T)+' [K]') 
-        plt.xticks(np.arange(np.min(wavelengths*1e9), np.max(wavelengths*1e9), step=100))
-        plt.ylabel(r'SSI [W $m^{-2}\, nm^{-1}$]')
-        plt.xlabel(r'$\lambda [\mathrm{nm}]$')
+        ax.plot(wavelengths*1e9, B,label='T='+'{:06.2f}'.format(T)+' [K]') 
+        #ax.xticks(np.arange(np.min(wavelengths*1e9), np.max(wavelengths*1e9), step=100))
+        ax.set_ylabel(r'SSI [W $m^{-2}\, nm^{-1}$]')
+        ax.set_xlabel(r'$\lambda [\mathrm{nm}]$')
 
     # show the plot
-    plt.grid()
-    plt.legend()
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(50))
+    ax.xaxis.set_minor_locator(ticker.MultipleLocator(25))
+    ax.set_xlim(0,1500)
+    ax.grid()
+    ax.legend()
     plt.show()
     
     return np.array(wavelength),np.array(intensity),np.array(Temp)
@@ -259,6 +265,7 @@ def planet_temperature(Lstar=Lsun):
     fig =plt.figure(figsize=(14, 7)) 
     ax = fig.add_subplot(111)
     ax.set_xlim([0,6.])
+    ax.set_ylim([0,800.])
     ax.plot(Rp/AU,Tp,color='blue')
     ax.set_ylabel(r'$T \, [\mathrm{K}]$')
     ax.set_xlabel(r'$R_p \, [\mathrm{AU}]$')
@@ -266,8 +273,8 @@ def planet_temperature(Lstar=Lsun):
     ax.set_title(r'Temperature of planets at distance  $R_p$')
     ax.xaxis.set_major_locator(ticker.MultipleLocator(0.25))
     ax.xaxis.set_minor_locator(ticker.MultipleLocator(0.125))
-    ax.yaxis.set_major_locator(ticker.MultipleLocator(100))
-    ax.yaxis.set_minor_locator(ticker.MultipleLocator(50))
+    ax.yaxis.set_major_locator(ticker.MultipleLocator(50))
+    ax.yaxis.set_minor_locator(ticker.MultipleLocator(25))
     
     plt.show()
     
