@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pylab as plt
 import matplotlib.cm as cm
+import matplotlib.ticker as ticker
 # support routines for jupyter notebook
 
 #astro distance
@@ -244,7 +245,33 @@ def get_spectra():
     plt.show()
     
     return np.array(wavelength),np.array(intensity),np.array(Temp)
+
+
+
+# calculate temperature of planet
+def planet_temperature(Lstar=Lsun):
     
+    Rp = np.linspace(0,6*AU, 200)
+    Tp = (0.25*Lstar/(4*np.pi*sigmaSB*Rp**2))**(0.25)
+    
+   
+    
+    fig =plt.figure(figsize=(14, 7)) 
+    ax = fig.add_subplot(111)
+    ax.set_xlim([0,6.])
+    ax.plot(Rp/AU,Tp,color='blue')
+    ax.set_ylabel(r'$T \, [\mathrm{K}]$')
+    ax.set_xlabel(r'$R_p \, [\mathrm{AU}]$')
+    ax.grid()
+    ax.set_title(r'Temperature of planets at distance  $R_p$')
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(0.25))
+    ax.xaxis.set_minor_locator(ticker.MultipleLocator(0.125))
+    ax.yaxis.set_major_locator(ticker.MultipleLocator(100))
+    ax.yaxis.set_minor_locator(ticker.MultipleLocator(50))
+    
+    plt.show()
+    
+
     
 #SOLUTIONS
 
