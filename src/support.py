@@ -246,8 +246,9 @@ def get_spectra():
         wavelength.append(wavelengths*1e9)
         ax.plot(wavelengths*1e9, B,label='T='+'{:06.2f}'.format(T)+' [K]') 
         #ax.xticks(np.arange(np.min(wavelengths*1e9), np.max(wavelengths*1e9), step=100))
+        ax.set_title('Black Body spectra')
         ax.set_ylabel(r'SSI [W $m^{-2}\, nm^{-1}$]')
-        ax.set_xlabel(r'$\lambda [\mathrm{nm}]$')
+        ax.set_xlabel(r'wavelength $\lambda [\mathrm{nm}]$')
 
     # show the plot
     ax.xaxis.set_major_locator(ticker.MultipleLocator(50))
