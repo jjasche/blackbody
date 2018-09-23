@@ -63,7 +63,7 @@ def plot_hz(lower_limit=1,upper_limit=2):
     if(upper_limit>lower_limit):
         ax.axvspan(lower_limit, upper_limit, alpha=0.3, color='green')
     s0=400	
-    for i, txt in enumerate(pnames_random):
+    for i, txt in enumerate(pnames):
         ax.scatter(x[i], y[i], color=pcolor[i], s=s0*pradii[i]/pradii[2], marker='o')    
         ax.annotate(txt, (x[i], y[i]+0.1), fontsize=10)
 
@@ -181,11 +181,18 @@ def plot_data_spec(objectnr):
     x = data['wavelengths']
     y = data['spectrum']
 
-    plt.figure(figsize=(14, 7))
-    plt.plot(x,y,lw=0.5)
-    plt.xlabel(r'wavelength $\lambda$ [nm]')
-    plt.ylabel(r'SSI [W $m^{-2}\, nm^{-1}$]')
-    plt.grid()
+    
+    fig =plt.figure(figsize=(14, 7)) 
+    ax = fig.add_subplot(111)
+  
+    ax.plot(x,y,lw=0.5)
+    ax.set_xlim([0.,1500])
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(50))
+    ax.xaxis.set_minor_locator(ticker.MultipleLocator(25))
+    ax.set_xlabel(r'wavelength $\lambda$ [nm]')
+    ax.set_ylabel(r'SSI [W $m^{-2}\, nm^{-1}$]')
+    ax.grid(b=True, which='major', linestyle='-')
+    ax.grid(b=True, which='minor', linestyle=':')
     plt.show()
     
     return x, y
@@ -246,7 +253,8 @@ def get_spectra():
     ax.xaxis.set_major_locator(ticker.MultipleLocator(50))
     ax.xaxis.set_minor_locator(ticker.MultipleLocator(25))
     ax.set_xlim(0,1500)
-    ax.grid()
+    ax.grid(b=True, which='major', linestyle='-')
+    ax.grid(b=True, which='minor', linestyle=':')
     ax.legend()
     plt.show()
     
@@ -269,7 +277,8 @@ def planet_temperature(Lstar=Lsun):
     ax.plot(Rp/AU,Tp,color='blue')
     ax.set_ylabel(r'$T \, [\mathrm{K}]$')
     ax.set_xlabel(r'$R_p \, [\mathrm{AU}]$')
-    ax.grid()
+    ax.grid(b=True, which='major', linestyle='-')
+    ax.grid(b=True, which='minor', linestyle=':')
     ax.set_title(r'Temperature of planets at distance  $R_p$')
     ax.xaxis.set_major_locator(ticker.MultipleLocator(0.25))
     ax.xaxis.set_minor_locator(ticker.MultipleLocator(0.125))
