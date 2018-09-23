@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pylab as plt
 import matplotlib.cm as cm
+import matplotlib.ticker as ticker
 # support routines for jupyter notebook
 
 #astro distance
@@ -62,11 +63,16 @@ def plot_hz(lower_limit=1,upper_limit=2):
     if(upper_limit>lower_limit):
         ax.axvspan(lower_limit, upper_limit, alpha=0.3, color='green')
     s0=400	
-    for i, txt in enumerate(pnames_random):
+    for i, txt in enumerate(pnames):
         ax.scatter(x[i], y[i], color=pcolor[i], s=s0*pradii[i]/pradii[2], marker='o')    
         ax.annotate(txt, (x[i], y[i]+0.1), fontsize=10)
 
-def plot_HR(L=10**np.random.uniform(-5,6,200)*Lsun,T=np.random.uniform(0.25,10,200)*Tsun,Tmin=1000,Tmax=40000,Lmin=1e-5,Lmax=1e6):
+def plot_HR(Ls=10**np.random.uniform(-5,6,200)*Lsun,Ts=np.random.uniform(0.25,10,200)*Tsun,Tmin=1000,Tmax=40000,Lmin=1e-5,Lmax=1e6):
+    
+    T,Mag=np.loadtxt('./data/stars.txt', usecols=[0,1], unpack=True)
+    L=Lsun*10**(0.4*(4.74-Mag))
+    
+    
     y, x = np.mgrid[np.log10(Lmin):np.log10(Lmax):100j, np.log10(Tmin):np.log10(Tmax):100j]
     size = np.sqrt(10**(y)*(Tsun/(10**x))**4)
     temp = x
@@ -80,6 +86,11 @@ def plot_HR(L=10**np.random.uniform(-5,6,200)*Lsun,T=np.random.uniform(0.25,10,2
     lgL=np.log10(L/Lsun)
     lgT=np.log10(T)
     R=np.sqrt(10**(lgL)*(Tsun/(10**lgT))**4)
+    
+    
+    lgLs=np.log10(Ls/Lsun)
+    lgTs=np.log10(Ts)
+    Rs=np.sqrt(10**(lgLs)*(Tsun/(10**lgTs))**4)
     
     
     levels = [0.001,0.01,0.1,1,10,100,1000]
@@ -100,6 +111,15 @@ def plot_HR(L=10**np.random.uniform(-5,6,200)*Lsun,T=np.random.uniform(0.25,10,2
     ax.set_ylabel(r'luminosity $L_{\star}$ [$L_{_\odot}$]', fontsize=20)
     ax.set_title('Hertzsprung–Russell diagram', fontsize=20)
     ax.scatter(lgT,lgL,s=R*s0,c=T,cmap='magma_r')
+    ax.scatter(lgTs[0],lgLs[0],s=s0*4,color='green')
+    ax.scatter(lgTs[0],lgLs[0],s=s0*4,color='goldenrod',marker=(5, 2))
+    ax.annotate("Object Nr. 1", (lgTs[0]+.1, lgLs[0]+.3), fontsize=18,color='green')
+    ax.scatter(lgTs[1],lgLs[1],s=s0*4,color='red')
+    ax.scatter(lgTs[1],lgLs[1],s=s0*4,color='goldenrod',marker=(5, 2))
+    ax.annotate("Object Nr. 2", (lgTs[1]+.1, lgLs[1]+.3), fontsize=18,color='red')
+    ax.scatter(lgTs[2],lgLs[2],s=s0*4,color='blue')
+    ax.scatter(lgTs[2],lgLs[2],s=s0*4,color='goldenrod',marker=(5, 2))
+    ax.annotate("Object Nr. 3", (lgTs[2]+.1, lgLs[2]+.3), fontsize=18,color='blue')
     #ax.scatter(lgTsun,lgLsun,c=T,s=s0,cmap='magma_r')
     ax.invert_xaxis()
 
@@ -161,11 +181,18 @@ def plot_data_spec(objectnr):
     x = data['wavelengths']
     y = data['spectrum']
 
-    plt.figure(figsize=(14, 7))
-    plt.plot(x,y,lw=0.5)
-    plt.xlabel(r'wavelength $\lambda$ [nm]')
-    plt.ylabel(r'SSI [W $m^{-2}\, nm^{-1}$]')
-    plt.grid()
+    
+    fig =plt.figure(figsize=(14, 7)) 
+    ax = fig.add_subplot(111)
+  
+    ax.plot(x,y,lw=0.5)
+    ax.set_xlim([0.,1500])
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(50))
+    ax.xaxis.set_minor_locator(ticker.MultipleLocator(25))
+    ax.set_xlabel(r'wavelength $\lambda$ [nm]')
+    ax.set_ylabel(r'SSI [W $m^{-2}\, nm^{-1}$]')
+    ax.grid(b=True, which='major', linestyle='-')
+    ax.grid(b=True, which='minor', linestyle=':')
     plt.show()
     
     return x, y
@@ -208,24 +235,59 @@ def get_spectra():
     Temp=[]
     intensity=[]
     wavelength=[]
-    plt.figure(figsize=(14, 7))
+    
+    fig =plt.figure(figsize=(14, 7)) 
+    ax = fig.add_subplot(111)
+  
     for T in Temps:
         B = planck(wavelengths, T)
         intensity.append(B)
         Temp.append(T)
         wavelength.append(wavelengths*1e9)
-        plt.plot(wavelengths*1e9, B,label='T='+'{:06.2f}'.format(T)+' [K]') 
-        plt.xticks(np.arange(np.min(wavelengths*1e9), np.max(wavelengths*1e9), step=100))
-        plt.ylabel(r'$B(\lambda)$')
-        plt.xlabel(r'$\lambda [\mathrm{nm}]$')
+        ax.plot(wavelengths*1e9, B,label='T='+'{:06.2f}'.format(T)+' [K]') 
+        #ax.xticks(np.arange(np.min(wavelengths*1e9), np.max(wavelengths*1e9), step=100))
+        ax.set_ylabel(r'SSI [W $m^{-2}\, nm^{-1}$]')
+        ax.set_xlabel(r'$\lambda [\mathrm{nm}]$')
 
     # show the plot
-    plt.grid()
-    plt.legend()
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(50))
+    ax.xaxis.set_minor_locator(ticker.MultipleLocator(25))
+    ax.set_xlim(0,1500)
+    ax.grid(b=True, which='major', linestyle='-')
+    ax.grid(b=True, which='minor', linestyle=':')
+    ax.legend()
     plt.show()
     
     return np.array(wavelength),np.array(intensity),np.array(Temp)
+
+
+
+# calculate temperature of planet
+def planet_temperature(Lstar=Lsun):
     
+    Rp = np.linspace(0,6*AU, 200)
+    Tp = (0.25*Lstar/(4*np.pi*sigmaSB*Rp**2))**(0.25)
+    
+   
+    
+    fig =plt.figure(figsize=(14, 7)) 
+    ax = fig.add_subplot(111)
+    ax.set_xlim([0,6.])
+    ax.set_ylim([0,800.])
+    ax.plot(Rp/AU,Tp,color='blue')
+    ax.set_ylabel(r'$T \, [\mathrm{K}]$')
+    ax.set_xlabel(r'$R_p \, [\mathrm{AU}]$')
+    ax.grid(b=True, which='major', linestyle='-')
+    ax.grid(b=True, which='minor', linestyle=':')
+    ax.set_title(r'Temperature of planets at distance  $R_p$')
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(0.25))
+    ax.xaxis.set_minor_locator(ticker.MultipleLocator(0.125))
+    ax.yaxis.set_major_locator(ticker.MultipleLocator(50))
+    ax.yaxis.set_minor_locator(ticker.MultipleLocator(25))
+    
+    plt.show()
+    
+
     
 #SOLUTIONS
 
