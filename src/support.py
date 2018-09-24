@@ -353,7 +353,38 @@ def solution_wien_displacement(lambdas=None):
     
     return Temps, Lums
     
+
+#1) Solution Wien's displacement
+def plot_solution_wien_displacement():    
     
+    data=np.load('input_data_wien_displacement.npz')
+    T_list=data['T_list']
+    lambda_list=data['lambda_list']
+    
+    fig =plt.figure(figsize=(14, 7)) 
+    ax = fig.add_subplot(111)
+    
+    ax.set_ylabel('Wavelength (nm)')
+    ax.set_xlabel('Temperature (K)')
+    ax.grid(b=True, which='major', linestyle='-')
+    ax.grid(b=True, which='minor', linestyle=':')
+    ax.set_title(r"Wien's displacement law ")
+    
+    Tmax=np.linspace(3000,8000,100)
+    lmax = b/Tmax*1e9 #nm
+    ax.set_xlim(3000,8000)
+    ax.set_ylim(0,1000)
+    ax.plot(T_list,lambda_list, linestyle=' ', marker='o', color='r', label='Square')
+    ax.plot(Tmax,lmax, color='blue')
+    
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(200))
+    ax.xaxis.set_minor_locator(ticker.MultipleLocator(100))
+    ax.yaxis.set_major_locator(ticker.MultipleLocator(50))
+    ax.yaxis.set_minor_locator(ticker.MultipleLocator(25))
+    
+    plt.show
+
+
 
 
 
