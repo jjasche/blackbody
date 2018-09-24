@@ -267,7 +267,8 @@ def get_spectra():
 def planet_temperature(Lstar=Lsun):
     
     Rp = np.linspace(0,6*AU, 200)
-    Tp = (0.25*Lstar/(4*np.pi*sigmaSB*Rp**2))**(0.25)
+    #fixed values for game
+    Tp = (0.5*Lstar/(4*np.pi*sigmaSB*Rp**2))**(0.25)
     
    
     
