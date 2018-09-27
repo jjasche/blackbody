@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pylab as plt
 import matplotlib.cm as cm
 import matplotlib.ticker as ticker
+from matplotlib.ticker import ScalarFormatter
 # support routines for jupyter notebook
 
 #astro distance
@@ -53,6 +54,9 @@ def plot_hz(lower_limit=1,upper_limit=2):
     x = pdistances/AU
     y = np.ones(len(x))
 
+    
+    
+    
     fig, ax = plt.subplots(figsize=(14, 7))
     ax.set_title('The habitable zone around a star', fontsize=20)
     ax.set_ylim([0.5,1.5])
@@ -60,6 +64,9 @@ def plot_hz(lower_limit=1,upper_limit=2):
     ax.set_xscale('log')
     ax.set_xlabel(r'$d$ [AU]', fontsize=20)
     ax.get_yaxis().set_visible(False)
+    ax.xaxis.set_major_formatter(ScalarFormatter())
+
+
     if(upper_limit>lower_limit):
         ax.axvspan(lower_limit, upper_limit, alpha=0.3, color='green')
     s0=400	
@@ -121,6 +128,22 @@ def plot_HR(Ls=10**np.random.uniform(-5,6,200)*Lsun,Ts=np.random.uniform(0.25,10
     ax.scatter(lgTs[2],lgLs[2],s=s0*4,color='goldenrod',marker=(5, 2))
     ax.annotate("Object Nr. 3", (lgTs[2]+.1, lgLs[2]+.3), fontsize=18,color='blue')
     #ax.scatter(lgTsun,lgLsun,c=T,s=s0,cmap='magma_r')
+    
+    def format_func_x(value, tick_number):
+        # find number of multiples of pi/2
+    
+        res = 10**value
+        return r'{:0.0f}'.format(res)
+    
+    def format_func_y(value, tick_number):
+        # find number of multiples of pi/2
+    
+        res = 10**value
+        return r'{:0.4f}'.format(res)
+
+    
+    ax.yaxis.set_major_formatter(plt.FuncFormatter(format_func_y))
+    ax.xaxis.set_major_formatter(plt.FuncFormatter(format_func_x))
     ax.invert_xaxis()
 
     
@@ -190,7 +213,7 @@ def plot_data_spec(objectnr):
     ax.xaxis.set_major_locator(ticker.MultipleLocator(50))
     ax.xaxis.set_minor_locator(ticker.MultipleLocator(25))
     ax.set_xlabel(r'wavelength $\lambda$ [nm]')
-    ax.set_ylabel(r'Intensity [W $m^{-2}\, nm^{-1}$]')
+    ax.set_ylabel(r'Solar Spectral Irradiance (SSI) [W $m^{-2}\, nm^{-1}$]')
     ax.grid(b=True, which='major', linestyle='-')
     ax.grid(b=True, which='minor', linestyle=':')
     plt.show()
@@ -246,8 +269,8 @@ def get_spectra():
         wavelength.append(wavelengths*1e9)
         ax.plot(wavelengths*1e9, B,label='T='+'{:06.2f}'.format(T)+' [K]') 
         #ax.xticks(np.arange(np.min(wavelengths*1e9), np.max(wavelengths*1e9), step=100))
-        ax.set_title('Black Body spectra')
-        ax.set_ylabel(r'Intensity [W $m^{-2}\, nm^{-1}$]')
+        ax.set_title('Black Body spectra, also known as Planck spectra')
+        ax.set_ylabel(r'Solar Spectral Irradiance (SSI) [W $m^{-2}\, nm^{-1}$]')
         ax.set_xlabel(r'wavelength $\lambda [\mathrm{nm}]$')
 
     # show the plot
@@ -256,7 +279,7 @@ def get_spectra():
     ax.set_xlim(0,1500)
     ax.grid(b=True, which='major', linestyle='-')
     ax.grid(b=True, which='minor', linestyle=':')
-    ax.legend(fontsize=20)
+    ax.legend( prop={'size': 18})
     plt.show()
     
     return np.array(wavelength),np.array(intensity),np.array(Temp)
