@@ -128,6 +128,22 @@ def plot_HR(Ls=10**np.random.uniform(-5,6,200)*Lsun,Ts=np.random.uniform(0.25,10
     ax.scatter(lgTs[2],lgLs[2],s=s0*4,color='goldenrod',marker=(5, 2))
     ax.annotate("Object Nr. 3", (lgTs[2]+.1, lgLs[2]+.3), fontsize=18,color='blue')
     #ax.scatter(lgTsun,lgLsun,c=T,s=s0,cmap='magma_r')
+    
+    def format_func_x(value, tick_number):
+        # find number of multiples of pi/2
+    
+        res = 10**value
+        return r'{:0.0f}'.format(res)
+    
+    def format_func_y(value, tick_number):
+        # find number of multiples of pi/2
+    
+        res = 10**value
+        return r'{:0.4f}'.format(res)
+
+    
+    ax.yaxis.set_major_formatter(plt.FuncFormatter(format_func_y))
+    ax.xaxis.set_major_formatter(plt.FuncFormatter(format_func_x))
     ax.invert_xaxis()
 
     
