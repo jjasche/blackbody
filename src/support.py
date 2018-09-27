@@ -14,7 +14,7 @@ sigmaSB = 5.670373e-8 #W m^-2 K^-4
 h = 6.626e-34
 c = 3.0e+8
 k = 1.38e-23
-b = 2.8977729*1e-3# m⋅K
+b = 2.8977729*1e-3 # mK
 
 
 Rsun = 6.957*1e8 # m
@@ -116,7 +116,7 @@ def plot_HR(Ls=10**np.random.uniform(-5,6,200)*Lsun,Ts=np.random.uniform(0.25,10
     
     ax.set_xlabel(r'surface temperature $T_{\star}$ [K]', fontsize=20)
     ax.set_ylabel(r'luminosity $L_{\star}$ [$L_{_\odot}$]', fontsize=20)
-    ax.set_title('Hertzsprung–Russell diagram', fontsize=20)
+    ax.set_title('Hertzsprung-Russell diagram',fontsize=20)
     ax.scatter(lgT,lgL,s=R*s0,c=T,cmap='magma_r')
     ax.scatter(lgTs[0],lgLs[0],s=s0*4,color='green')
     ax.scatter(lgTs[0],lgLs[0],s=s0*4,color='goldenrod',marker=(5, 2))
